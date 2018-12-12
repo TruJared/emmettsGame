@@ -20,7 +20,7 @@ const LaunchRequestHandler = {
       ? functions.shuffle(constants.phrasePool.salutation)[0]
       : 'Hello!';
     const repromptText = speechText;
-    persistentAttributes.passTo = 'HelloWorldIntentHandler';
+    persistentAttributes.passTo = false;
 
     if (persistentAttributes.newUser) {
       persistentAttributes.newUser = false;
@@ -29,32 +29,64 @@ const LaunchRequestHandler = {
 
     // * set persistentAttributes to sessionAttributes * //
     attributesManager.setSessionAttributes(persistentAttributes);
+    const sessionAttributes = attributesManager.getSessionAttributes();
+
+    console.log(
+      `Persist >>>> ${JSON.stringify(persistentAttributes)}
+       Session >>>> ${JSON.stringify(sessionAttributes)}`
+    );
+
     return responseBuilder
-      .speak(salutation + speechText)
+      .speak(`${salutation} ${speechText}`)
       .reprompt(repromptText)
       .withSimpleCard(cardParams.cardTitle, cardString)
       .getResponse();
   },
 };
 
-const HelloWorldIntentHandler = {
+const GetPlayerInfoInProgress = {
   canHandle(handlerInput) {
     const { request } = handlerInput.requestEnvelope;
     return (
       request.type === 'IntentRequest' &&
-      request.intent.name === 'HelloWorldIntent'
+      request.intent.name === 'GetPlayerInfoIntent' &&
+      request.dialogState !== 'COMPLETED'
+    );
+  },
+  async handle(handlerInput) {
+    const { responseBuilder } = handlerInput;
+    const currentIntent = handlerInput.requestEnvelope.request.intent;
+
+    return responseBuilder.addDelegateDirective(currentIntent).getResponse();
+  },
+};
+
+const GetPlayerInfoCompleted = {
+  canHandle(handlerInput) {
+    const { request } = handlerInput.requestEnvelope;
+    return (
+      request.type === 'IntentRequest' &&
+      request.intent.name === 'GetPlayerInfoIntent'
     );
   },
   async handle(handlerInput) {
     const { attributesManager, responseBuilder } = handlerInput;
+    const persistentAttributes = await attributesManager.getPersistentAttributes();
     const sessionAttributes = attributesManager.getSessionAttributes();
-    const { speechText } = responses.helloWorldResponse;
-    sessionAttributes.repeatText = speechText;
-    sessionAttributes.passTo = 'false';
+    const filledSlots = handlerInput.requestEnvelope.request.intent.slots;
+    const slotValues = functions.getSlotValues(filledSlots);
+    console.log(JSON.stringify(slotValues));
 
     attributesManager.setPersistentAttributes(sessionAttributes);
     await attributesManager.savePersistentAttributes();
-    return responseBuilder.speak(speechText).getResponse();
+    return responseBuilder
+      .speak(
+        `hello ${slotValues.name.resolved}, you are ${
+          slotValues.name.resolved
+        } years old`
+      )
+      .withShouldEndSession(true)
+      .getResponse();
   },
 };
 
@@ -98,7 +130,7 @@ const YesIntentHandler = {
       switch (sessionAttributes.passTo) {
         case 'HelloWorldIntentHandler':
           console.log(sessionAttributes);
-          return HelloWorldIntentHandler.handle(handlerInput);
+          return null;
         default:
           throw new Error(
             `In yes intent switch. Most likely this error is because of an invalid 'passTo' value >>> sessionAttributes.passTo = ${
@@ -279,8 +311,9 @@ const skillBuilder = Alexa.SkillBuilders.standard();
 exports.handler = skillBuilder
   .addRequestHandlers(
     LaunchRequestHandler,
+    GetPlayerInfoInProgress,
+    GetPlayerInfoCompleted,
     HelpIntentHandler,
-    HelloWorldIntentHandler,
     YesIntentHandler,
     NoIntentHandler,
     RepeatIntentHandler,

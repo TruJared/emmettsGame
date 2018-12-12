@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "my template",
+      "invocationName": "emmetts game",
       "intents": [
         {
           "name": "AMAZON.FallbackIntent",
@@ -93,11 +93,131 @@
           "samples": ["reset the skill"]
         },
         {
-          "name": "HelloWorldIntent",
-          "samples": ["hello world", "say hello world", "what is hello world"],
-          "slots": []
+          "name": "GetPlayerInfoIntent",
+          "slots": [
+            {
+              "name": "name",
+              "type": "AMAZON.US_FIRST_NAME",
+              "samples": [
+                "I am {name}",
+                "they call me {name}",
+                "my  name is {name}",
+                "my name {name}",
+                "{name}"
+              ]
+            },
+            {
+              "name": "age",
+              "type": "AMAZON.NUMBER",
+              "samples": [
+                "I am {age} years old",
+                "{age}",
+                "i am old {age}",
+                "my {age} is",
+                "{age} is my age",
+                "{age} is how old I am"
+              ]
+            }
+          ],
+          "samples": [
+            "I am {name}",
+            "they call me {name}",
+            "my name is {name}",
+            "my name {name}",
+            "{name}",
+            "I am {age} years old",
+            "{age}",
+            "i am old {age}",
+            "my {age} is",
+            "{age} is my age",
+            "{age} is how old I am",
+            "I am {name} and I am {age} years old.",
+            "My name is {name} and I am {age} years old",
+            "You can call me {name} and I am {age} old"
+          ]
+        }
+      ],
+      "types": []
+    },
+    "dialog": {
+      "intents": [
+        {
+          "name": "GetPlayerInfoIntent",
+          "confirmationRequired": true,
+          "prompts": {
+            "confirmation": "Confirm.Intent.GetPlayerInfoIntent"
+          },
+          "slots": [
+            {
+              "name": "name",
+              "type": "AMAZON.US_FIRST_NAME",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.GetPlayerInfoIntent.Name"
+              }
+            },
+            {
+              "name": "age",
+              "type": "AMAZON.NUMBER",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.GetPlayerInfoIntent.Age"
+              }
+            }
+          ]
         }
       ]
-    }
+    },
+    "prompts": [
+      {
+        "id": "Confirm.Intent.GetPlayerInfoIntent",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "I heard you say your name is {name}, correct?"
+          },
+          {
+            "type": "PlainText",
+            "value": "Did you say your name is {name}?"
+          },
+          {
+            "type": "PlainText",
+            "value": "I heard you say your age is {age}, correct?"
+          },
+          {
+            "type": "PlainText",
+            "value": "Did you say your age is {age}?"
+          },
+          {
+            "type": "PlainText",
+            "value": "Did you say your name is {name}, and you are {age} years old?"
+          },
+          {
+            "type": "PlainText",
+            "value": "I heard you say your name is {name}, and your age is {age}, correct?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.GetPlayerInfoIntent.Name",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "I'm sorry, I didn't catch your first name"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.GetPlayerInfoIntent.Age",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "I'm sorry, I didn't catch your age"
+          }
+        ]
+      }
+    ]
   }
 }

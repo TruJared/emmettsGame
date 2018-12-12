@@ -2,7 +2,7 @@
 
 const skill = {
   appId: '',
-  dynamoDBTableName: 'sampleDB',
+  dynamoDBTableName: 'emmettsGame',
 };
 
 const persistentAttributesAtStart = {
@@ -15,7 +15,7 @@ const menuItems = ['item 1', 'item 2', 'item 3', 'item 4'];
 
 const responses = {
   launchResponse: {
-    speechText: 'Would you like me to say "hello world"?',
+    speechText: 'What is your name, and how old are you?',
     cardParams: { cardTitle: 'Title', cardBody: 'Card Body' },
   },
   helloWorldResponse: {
