@@ -15,17 +15,19 @@ const menuItems = ['item 1', 'item 2', 'item 3', 'item 4'];
 
 const responses = {
   launchResponse: {
-    speechText: 'What is your name, and how old are you?',
+    speechText: 'What is your name?',
     cardParams: { cardTitle: 'Title', cardBody: 'Card Body' },
   },
-  helloWorldResponse: {
-    speechText: 'Hello World',
-    cardParams: { cardTitle: 'Title', cardBody: 'Card Body' },
+  getplayerInfoCompletedResponse: {
+    speechText: 'Are you ready to begin your game?',
+  },
+  startGameResponse: {
+    speechText: 'You successfully started a game. Goodbye',
   },
   helpResponse: {
     speechText:
-      'I sent a sample card to your device. Say "exit" to quit, or "hello world" to hear me say "hello world".',
-    cardParams: { cardTitle: 'HELP', cardBody: 'Card Body' },
+      'When you are ready to start a game, say "start a game". I will keep score of how many words you can guess when I spell them.',
+    cardParams: { cardTitle: 'HELP', cardBody: 'Say "start a game"' },
   },
   fallbackResponse: {
     speechText:

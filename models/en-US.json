@@ -93,6 +93,52 @@
           "samples": ["reset the skill"]
         },
         {
+          "name": "StartGameIntent",
+          "slots": [],
+          "samples": [
+            "Start",
+            "start game",
+            "start a game",
+            "i want to start a game",
+            "start a game please",
+            "let me start a game",
+            "please start a game",
+            "i need a new game",
+            "new game"
+          ]
+        },
+        {
+          "name": "GameLoopIntent",
+          "slots": [
+            {
+              "name": "guess",
+              "type": "CUSTOM_guess",
+              "samples": [
+                "{guess}",
+                "the word is {guess}",
+                "that's {guess}",
+                "my guess is {guess}",
+                "I am spelling {guess}",
+                "the word i am going to guess is {guess}",
+                "the answer is {guess}",
+                "is the answer {guess}",
+                "I think the answer is {guess}"
+              ]
+            }
+          ],
+          "samples": [
+            "{guess}",
+            "the word is {guess}",
+            "that's {guess}",
+            "my guess is {guess}",
+            "I am spelling {guess}",
+            "the word i am going to guess is {guess}",
+            "the answer is {guess}",
+            "is the answer {guess}",
+            "I think the answer is {guess}"
+          ]
+        },
+        {
           "name": "GetPlayerInfoIntent",
           "slots": [
             {
@@ -117,27 +163,53 @@
                 "{age} is my age",
                 "{age} is how old I am"
               ]
+            },
+            {
+              "name": "color",
+              "type": "AMAZON.Color",
+              "samples": [
+                "my favorite color is {color}",
+                "{color}",
+                "i like {color}",
+                "{color} is my favorite color",
+                "I love {color}"
+              ]
             }
           ],
           "samples": [
-            "I am {name}",
             "they call me {name}",
             "my name is {name}",
             "my name {name}",
             "{name}",
             "I am {age} years old",
-            "{age}",
             "i am old {age}",
             "my {age} is",
             "{age} is my age",
             "{age} is how old I am",
+            "my favorite color is {color}",
+            "I like the color {color}",
+            "{color} is my favorite",
             "I am {name} and I am {age} years old.",
             "My name is {name} and I am {age} years old",
-            "You can call me {name} and I am {age} old"
+            "You can call me {name} and I am {age} old",
+            "I am {name} I am {age} years old my favorite color is {color}",
+            "My name is {name} I am {age} years old i lke the color {color}",
+            "You can call me {name} I am {age} old my favorite color is {color}"
           ]
         }
       ],
-      "types": []
+      "types": [
+        {
+          "name": "CUSTOM_guess",
+          "values": [
+            {
+              "name": {
+                "value": "cat"
+              }
+            }
+          ]
+        }
+      ]
     },
     "dialog": {
       "intents": [
@@ -164,6 +236,15 @@
               "elicitationRequired": true,
               "prompts": {
                 "elicitation": "Elicit.Slot.GetPlayerInfoIntent.Age"
+              }
+            },
+            {
+              "name": "color",
+              "type": "AMAZON.Color",
+              "confirmationRequired": false,
+              "elicitationRequired": true,
+              "prompts": {
+                "elicitation": "Elicit.Slot.GetPlayerInfoIntent.Color"
               }
             }
           ]
@@ -197,6 +278,22 @@
           {
             "type": "PlainText",
             "value": "I heard you say your name is {name}, and your age is {age}, correct?"
+          },
+          {
+            "type": "PlainText",
+            "value": "I heard you say your favorite color is {color}, correct?"
+          },
+          {
+            "type": "PlainText",
+            "value": "Did you say your favorite color is {color}?"
+          },
+          {
+            "type": "PlainText",
+            "value": "Did you say your name is {name}, you are {age} years old, and your favorite color is {color}?"
+          },
+          {
+            "type": "PlainText",
+            "value": "I heard you say your name is {name}, your age is {age}, and your favorite color is {color}, correct?"
           }
         ]
       },
@@ -206,6 +303,18 @@
           {
             "type": "PlainText",
             "value": "I'm sorry, I didn't catch your first name"
+          },
+          {
+            "type": "PlainText",
+            "value": "What is your name?"
+          },
+          {
+            "type": "PlainText",
+            "value": "By what name would you like me to call you?"
+          },
+          {
+            "type": "PlainText",
+            "value": "What name should I call you?"
           }
         ]
       },
@@ -214,7 +323,40 @@
         "variations": [
           {
             "type": "PlainText",
-            "value": "I'm sorry, I didn't catch your age"
+            "value": "I'm sorry, I didn't catch your years old."
+          },
+          {
+            "type": "PlainText",
+            "value": "How old are you, in years?"
+          },
+          {
+            "type": "PlainText",
+            "value": "Tell me your age in years"
+          },
+          {
+            "type": "PlainText",
+            "value": "In years, how old are you?"
+          }
+        ]
+      },
+      {
+        "id": "Elicit.Slot.GetPlayerInfoIntent.Color",
+        "variations": [
+          {
+            "type": "PlainText",
+            "value": "I'm sorry, I didn't catch your favorite color"
+          },
+          {
+            "type": "PlainText",
+            "value": "What is your favorite color?"
+          },
+          {
+            "type": "PlainText",
+            "value": "What color is your favorite?"
+          },
+          {
+            "type": "PlainText",
+            "value": "Please tell me your favorite color."
           }
         ]
       }
