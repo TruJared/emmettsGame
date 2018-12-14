@@ -47,6 +47,7 @@ const GetPlayerInfoInProgress = {
   canHandle(handlerInput) {
     const { request } = handlerInput.requestEnvelope;
     const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+
     return (
       request.type === 'IntentRequest' &&
       (request.intent.name === 'GetPlayerInfoIntent' &&
@@ -55,7 +56,10 @@ const GetPlayerInfoInProgress = {
     );
   },
   async handle(handlerInput) {
-    const { responseBuilder } = handlerInput;
+    const { requestEnvelope, responseBuilder } = handlerInput;
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+    // const currentIntent = requestEnvelope.request.intent;
+    sessionAttributes.passTo = false;
 
     return responseBuilder.addDelegateDirective().getResponse();
   },
@@ -89,6 +93,7 @@ const GetPlayerInfoCompleted = {
     };
 
     if (name === 'GetPlayerInfoIntent' && confirmationStatus === 'DENIED') {
+      sessionAttributes.playerInfo = {};
       return responseBuilder
         .speak("I'm sorry, What is your name?")
         .reprompt("I'm sorry, What is your name?")
@@ -109,7 +114,7 @@ const StartGameIntentHandler = {
 
     return (
       request.type === 'IntentRequest' &&
-      (request.intent.name === 'StartGameIntent' && !sessionAttributes.inGame)
+      (request.intent.name === 'StartGameIntent' && sessionAttributes.inGame)
     );
   },
   async handle(handlerInput) {
@@ -117,7 +122,7 @@ const StartGameIntentHandler = {
     const sessionAttributes = attributesManager.getSessionAttributes();
     let speechText = '';
     let repromptText = '';
-    sessionAttributes.passTo = 'false';
+    sessionAttributes.passTo = false;
 
     // ? did we collect player info yet ? //
     // if not -> trigger get name //
@@ -134,15 +139,12 @@ const StartGameIntentHandler = {
     // initialize currentTurn //
     sessionAttributes.currentTurn = 0;
 
-    // turn inGame flag on
-    sessionAttributes.inGame = true;
-
     // ask the first word -> game loop will take over from here
     speechText = 'The word is';
     const word = wordsList[sessionAttributes.currentTurn].split('').join(', '); // c, a, t
     repromptText = word;
-    sessionAttributes.repeatText = speechText;
-    console.log(word);
+    sessionAttributes.word = word.split(', ').join(''); // cat
+    sessionAttributes.repeatText = `${speechText} <break time="0.50s" /> ${word}`;
 
     return responseBuilder
       .speak(`${speechText} <break time="0.50s" /> ${word}`)
@@ -151,7 +153,7 @@ const StartGameIntentHandler = {
         `>> ${
           sessionAttributes.playerInfo.name
         } << \n Round: ${sessionAttributes.currentTurn + 1}`,
-        word.split(', ').join('') // cat
+        sessionAttributes.word
       )
       .getResponse();
   },
@@ -160,22 +162,46 @@ const StartGameIntentHandler = {
 const GameLoopHandler = {
   canHandle(handlerInput) {
     const { request } = handlerInput.requestEnvelope;
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+
     return (
       request.type === 'IntentRequest' &&
-      request.intent.name === 'GameLoopIntent'
+      (request.intent.name === 'GameLoopIntent' && sessionAttributes.inGame)
     );
   },
   async handle(handlerInput) {
     const { attributesManager, responseBuilder } = handlerInput;
     const sessionAttributes = attributesManager.getSessionAttributes();
-    const { speechText } = responses;
-    const repromptText = speechText;
+    const filledSlots = handlerInput.requestEnvelope.request.intent.slots;
+    const slotValues = functions.getSlotValues(filledSlots);
+    const guess = slotValues.guess.resolved;
+    sessionAttributes.passTo = false;
+    console.log(JSON.stringify(slotValues));
+
+    console.log(
+      `word: ${
+        sessionAttributes.word
+      } >>> guess: ${guess} ???? are equal: ${sessionAttributes.word === guess}`
+    );
+
+    if (sessionAttributes.word === guess) {
+      return (
+        responseBuilder
+          .speak(`you win ${sessionAttributes.playerInfo.name}!`)
+          // .reprompt(repromptText)
+          // .withSimpleCard(cardParams.cardTitle, cardParams.cardBody)
+          .getResponse()
+      );
+    }
+
+    const speechText = '';
     sessionAttributes.repeatText = speechText;
     sessionAttributes.passTo = 'false';
 
-    // // initialize game
+    // functions.checkGuess();
+
     // if (sessionAttributes.currentTurn === rounds) {
-    //   return GaveOverHandler.handle(handlerInput);
+    //   return GameOverHandler.handle(handlerInput);
     // }
 
     //   return responseBuilder
@@ -192,7 +218,7 @@ const GameLoopHandler = {
 
     return (
       responseBuilder
-        .speak(`you win ${sessionAttributes.playerInfo.name}!`)
+        .speak(`you lose ${sessionAttributes.playerInfo.name}!`)
         // .reprompt(repromptText)
         // .withSimpleCard(cardParams.cardTitle, cardParams.cardBody)
         .getResponse()
@@ -237,6 +263,8 @@ const YesIntentHandler = {
     if (sessionAttributes.passTo) {
       switch (sessionAttributes.passTo) {
         case 'StartGameIntentHandler':
+          // "lock" user into game
+          sessionAttributes.inGame = true;
           return StartGameIntentHandler.handle(handlerInput);
         default:
           throw new Error(
@@ -324,20 +352,27 @@ const ResetIntentHandler = {
 
 const FallBackHandler = {
   canHandle(handlerInput) {
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
     return (
       handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-      handlerInput.requestEnvelope.request.intent.name ===
-        'AMAZON.FallbackIntent'
+      (handlerInput.requestEnvelope.request.intent.name ===
+        'AMAZON.FallbackIntent' ||
+        (handlerInput.requestEnvelope.request.intent.name ===
+          'GetPlayerInfoIntent' &&
+          sessionAttributes.inGame))
     );
   },
   async handle(handlerInput) {
     const { responseBuilder } = handlerInput;
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
     const speechText = functions.shuffle(constants.phrasePool.fallback)[0];
     const repromptText = speechText;
 
     return responseBuilder
-      .speak(speechText)
-      .reprompt(repromptText)
+      .speak(
+        `${speechText} <break time="0.50s" /> ${sessionAttributes.repeatText}`
+      )
+      .reprompt(sessionAttributes.repeatText || speechText)
       .getResponse();
   },
 };
@@ -393,8 +428,7 @@ const ErrorHandler = {
       } <<
       ${JSON.stringify(handlerInput.requestEnvelope)}`
     );
-    const speechText =
-      'There appears to be something wrong. Please try again in a few moments';
+    const speechText = `There appears to be something wrong. Error Code: ${error} Please try again in a few moments`;
 
     attributesManager.setPersistentAttributes(sessionAttributes);
     await attributesManager.savePersistentAttributes();

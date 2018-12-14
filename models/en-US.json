@@ -112,9 +112,8 @@
           "slots": [
             {
               "name": "guess",
-              "type": "CUSTOM_guess",
+              "type": "AMAZON.SearchQuery",
               "samples": [
-                "{guess}",
                 "the word is {guess}",
                 "that's {guess}",
                 "my guess is {guess}",
@@ -122,12 +121,26 @@
                 "the word i am going to guess is {guess}",
                 "the answer is {guess}",
                 "is the answer {guess}",
-                "I think the answer is {guess}"
+                "I think the answer is {guess}",
+                "the word is {guess}",
+                "that's {guess}",
+                "my guess is {guess}",
+                "I am spelling {guess}",
+                "the word i am going to guess is {guess}",
+                "the answer is {guess}",
+                "is the answer {guess}",
+                "I think the answer is {guess}",
+                "The answer is {guess}",
+                "You spelled {guess}",
+                "The word is {guess}",
+                "spelled {guess}",
+                "i think it is {guess}",
+                "your word is {guess}",
+                "alexa's word is {guess}"
               ]
             }
           ],
           "samples": [
-            "{guess}",
             "the word is {guess}",
             "that's {guess}",
             "my guess is {guess}",
@@ -135,7 +148,22 @@
             "the word i am going to guess is {guess}",
             "the answer is {guess}",
             "is the answer {guess}",
-            "I think the answer is {guess}"
+            "I think the answer is {guess}",
+            "the word is {guess}",
+            "that's {guess}",
+            "my guess is {guess}",
+            "I am spelling {guess}",
+            "the word i am going to guess is {guess}",
+            "the answer is {guess}",
+            "is the answer {guess}",
+            "I think the answer is {guess}",
+            "The answer is {guess}",
+            "You spelled {guess}",
+            "The word is {guess}",
+            "spelled {guess}",
+            "i think it is {guess}",
+            "your word is {guess}",
+            "alexa's word is {guess}"
           ]
         },
         {
@@ -198,18 +226,7 @@
           ]
         }
       ],
-      "types": [
-        {
-          "name": "CUSTOM_guess",
-          "values": [
-            {
-              "name": {
-                "value": "cat"
-              }
-            }
-          ]
-        }
-      ]
+      "types": []
     },
     "dialog": {
       "intents": [
