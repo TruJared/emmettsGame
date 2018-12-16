@@ -114,7 +114,6 @@
               "name": "guess",
               "type": "AMAZON.SearchQuery",
               "samples": [
-                "the word is {guess}",
                 "that's {guess}",
                 "my guess is {guess}",
                 "I am spelling {guess}",
@@ -141,7 +140,6 @@
             }
           ],
           "samples": [
-            "the word is {guess}",
             "that's {guess}",
             "my guess is {guess}",
             "I am spelling {guess}",
