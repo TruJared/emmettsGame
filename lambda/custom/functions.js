@@ -1,6 +1,23 @@
+const getWord = (wordsList, turn) => {
+  const speechText = 'The word is ';
+  const sayWord = wordsList[turn]; // cat
+  const spellWord = sayWord.split('').join(', '); // c, a, t
+  return {
+    speechText,
+    sayWord,
+    spellWord,
+  };
+};
+
+const getRandomInt = (min, max) => {
+  const low = Math.ceil(min);
+  const high = Math.floor(max);
+  return Math.floor(Math.random() * (high - low + 1)) + low;
+};
+
 // >>> Start: Alexa Specific Functions <<< //
 /* eslint-disable */
-function getSlotValues(filledSlots) {
+const getSlotValues = function(filledSlots) {
   const slotValues = {};
 
   Object.keys(filledSlots).forEach(item => {
@@ -46,7 +63,7 @@ function getSlotValues(filledSlots) {
   }, this);
 
   return slotValues;
-}
+};
 
 const getSpokenValue = function(requestEnvelope, slotName) {
   if (
@@ -119,6 +136,8 @@ const shuffle = a => {
 /* eslint-enable */
 
 module.exports = {
+  getWord,
+  getRandomInt,
   getSlotValues,
   supportsDisplay,
   shuffle,

@@ -1,4 +1,4 @@
-exports.wordsLists = {
+exports.wordsList = {
   1: [
     'a',
     'about',
@@ -509,7 +509,8 @@ exports.wordsLists = {
     'wait',
     'warm',
     'week',
-    'wheels,yes',
+    'wheels',
+    'yes',
     'yet',
   ],
 
