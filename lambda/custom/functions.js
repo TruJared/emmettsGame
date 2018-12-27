@@ -1,3 +1,5 @@
+const mainDoc = require('./main.json');
+
 const getWord = (wordsList, turn) => {
   const speechText = 'The word is ';
   const sayWord = wordsList[turn]; // cat
@@ -13,6 +15,87 @@ const getRandomInt = (min, max) => {
   const low = Math.ceil(min);
   const high = Math.floor(max);
   return Math.floor(Math.random() * (high - low + 1)) + low;
+};
+
+const getDisplayData = displayParams => {
+  const {
+    logoUrl,
+    background,
+    smImgUrl,
+    lgImgUrl = smImgUrl,
+    title,
+    subTitle,
+    message,
+    hintText,
+  } = displayParams;
+  const datasources = {
+    bodyTemplate2Data: {
+      type: 'object',
+      objectId: 'bt2Sample',
+      backgroundImage: {
+        contentDescription: null,
+        smallSourceUrl: null,
+        largeSourceUrl: null,
+        sources: [
+          {
+            url: background,
+            size: 'small',
+            widthPixels: 0,
+            heightPixels: 0,
+          },
+          {
+            url: background,
+            size: 'large',
+            widthPixels: 0,
+            heightPixels: 0,
+          },
+        ],
+      },
+      title: "Let's Read",
+      image: {
+        contentDescription: null,
+        smallSourceUrl: null,
+        largeSourceUrl: null,
+        sources: [
+          {
+            url: smImgUrl,
+            size: 'small',
+            widthPixels: 0,
+            heightPixels: 0,
+          },
+          {
+            url: lgImgUrl,
+            size: 'large',
+            widthPixels: 0,
+            heightPixels: 0,
+          },
+        ],
+      },
+      textContent: {
+        title: {
+          type: 'PlainText',
+          text: title,
+        },
+        subtitle: {
+          type: 'PlainText',
+          text: subTitle,
+        },
+        primaryText: {
+          type: 'PlainText',
+          text: message,
+        },
+      },
+      logoUrl,
+      hintText,
+    },
+  };
+
+  return {
+    type: 'Alexa.Presentation.APL.RenderDocument',
+    version: '1.0',
+    document: mainDoc,
+    datasources,
+  };
 };
 
 // >>> Start: Alexa Specific Functions <<< //
@@ -137,6 +220,7 @@ const shuffle = a => {
 
 module.exports = {
   getWord,
+  getDisplayData,
   getRandomInt,
   getSlotValues,
   supportsDisplay,

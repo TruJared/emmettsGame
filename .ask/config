@@ -16,22 +16,25 @@
       },
       "resources": {
         "manifest": {
-          "eTag": "209d4129d9e1487cd10625d5bac8027f"
+          "eTag": "ff9a15867a572b36c3644010587ecdee"
         },
         "interactionModel": {
           "en-US": {
-            "eTag": "19a5e427f1e2022c88d8a1bbc73f2f7c"
+            "eTag": "6667a411cebc9bc1928cb99750e33b7f"
           }
         },
         "lambda": [
           {
-            "arn": "arn:aws:lambda:us-east-1:139829371454:function:ask-custom-emmettsGame-default",
-            "functionName": "arn:aws:lambda:us-east-1:139829371454:function:ask-custom-emmettsGame-default",
-            "awsRegion": "us-east-1",
             "alexaUsage": [
               "custom/default"
             ],
-            "revisionId": "919370e3-f47c-436b-a3f3-fe3c71167b94"
+            "arn": "arn:aws:lambda:us-east-1:139829371454:function:ask-custom-emmettsGame-default",
+            "awsRegion": "us-east-1",
+            "codeUri": "lambda/custom",
+            "functionName": "arn:aws:lambda:us-east-1:139829371454:function:ask-custom-emmettsGame-default",
+            "handler": "index.handler",
+            "revisionId": "dbcb0eb9-9954-47c5-b07a-0af8c1789e7f",
+            "runtime": "nodejs8.10"
           }
         ]
       }

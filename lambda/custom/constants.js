@@ -9,9 +9,52 @@ const persistentAttributesAtStart = {
   newUser: true,
 };
 
-// this is useful for keeping track of what's in the menu
-// good for cards, or help, etc...
-// const menuItems = ['item 1', 'item 2', 'item 3', 'item 4'];
+const logoUrl = 'https://s3.amazonaws.com/emmetts-game/icon_512_A2Z.png';
+
+const hasScreen = {
+  background:
+    'https://s3.amazonaws.com/emmetts-game/chalkboard-517818_1920.jpg',
+  defaultTitle: '',
+  defaultSubTitle: '',
+  defaultMessage: '',
+  hintText: [
+    'If you like this skill please rate it 🌟🌟🌟🌟🌟 on Amazon, Thanks!',
+    'If you like this skill please share 💬 it with a friend',
+    'Made with ❤️ by Jared Makes 💻 jaredmakes.com ',
+    'Thanks for playing my game. - Jared - ',
+    'Any feedback can be sent to 📧 jared@jaredmakes.com',
+    "Please take a minute to write ✏️ a review on Amazon. It's a huge help to us developers!",
+    '❤️ Ratings 🌟🌟🌟🌟🌟 and reviews 💻 are appreciated! ❤️',
+    'Thanks for playing. I had a lot of fun making this. - Jared - 😄',
+  ],
+  noVideoSupport: 'Sorry this device does not support video',
+  helloImages: [
+    'https://s3.amazonaws.com/emmetts-game/hello/bear-150424_640.png',
+    'https://s3.amazonaws.com/emmetts-game/hello/beaver-46221_640.png',
+    'https://s3.amazonaws.com/emmetts-game/hello/bird-1771435_640.png',
+    'https://s3.amazonaws.com/emmetts-game/hello/bird-1773616_640.png',
+    'https://s3.amazonaws.com/emmetts-game/hello/skeleton-1456627_640.png',
+  ],
+  winnerImages: [
+    'https://s3.amazonaws.com/emmetts-game/winner/cup-1010909_640.jpg',
+    'https://s3.amazonaws.com/emmetts-game/winner/cup-1010916_640.jpg',
+    'https://s3.amazonaws.com/emmetts-game/winner/cup-1614530_640.png',
+    'https://s3.amazonaws.com/emmetts-game/winner/friends-1020035_1920.jpg',
+    'https://s3.amazonaws.com/emmetts-game/winner/medal-1622523_640.png',
+    'https://s3.amazonaws.com/emmetts-game/winner/trophy-153395_640.png',
+  ],
+  pointsImages: {
+    1: 'https://s3.amazonaws.com/emmetts-game/numbers/counting-149951_640.png',
+    2: 'https://s3.amazonaws.com/emmetts-game/numbers/counting-149952_640.png',
+    3: 'https://s3.amazonaws.com/emmetts-game/numbers/counting-149953_640.png',
+    4: 'https://s3.amazonaws.com/emmetts-game/numbers/counting-149954_640.png',
+    5: 'https://s3.amazonaws.com/emmetts-game/numbers/counting-149955_640.png',
+    6: 'https://s3.amazonaws.com/emmetts-game/numbers/counting-149956_640.png',
+    7: 'https://s3.amazonaws.com/emmetts-game/numbers/counting-149957_640.png',
+    8: 'https://s3.amazonaws.com/emmetts-game/numbers/counting-149958_640.png',
+    9: 'https://s3.amazonaws.com/emmetts-game/numbers/counting-149959_640.png',
+  },
+};
 
 const responses = {
   launchResponse: {
@@ -79,7 +122,6 @@ const phrasePool = {
 const guessHints = [
   "that's ",
   'my guess is ',
-  'I am spelling ',
   'the word i am going to guess is ',
   'the answer is ',
   'is the answer ',
@@ -88,7 +130,6 @@ const guessHints = [
   "that's ",
   'I guess ',
   'my guess is ',
-  'I am spelling ',
   'the word i am going to guess is ',
   'the answer is ',
   'is the answer ',
@@ -96,22 +137,19 @@ const guessHints = [
   'The answer is ',
   'You spelled ',
   'The word is ',
-  'spelled ',
   'i think it is ',
   'your word is ',
   "alexa's word is ",
   'I can read ',
-  'I  guess',
+  'I guess',
   "that's ",
   'I guess ',
   'my guess is ',
-  'I am spelling ',
   'the word i am going to guess is ',
   'is the answer ',
   'I think the answer is ',
   'You spelled ',
   'The word is ',
-  'spelled ',
   'i think it is ',
   'your word is ',
   "alexa's word is ",
@@ -119,9 +157,10 @@ const guessHints = [
 ];
 
 module.exports = {
+  logoUrl,
+  hasScreen,
   skill,
   guessHints,
-  // menuItems,
   responses,
   phrasePool,
   persistentAttributesAtStart,

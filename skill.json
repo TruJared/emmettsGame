@@ -9,7 +9,7 @@
             "Alexa tell hello world hello",
             "Alexa ask hello world say hello"
           ],
-          "name": "Super Sight Words",
+          "name": "Let's Read",
           "description": "Sample Full Description"
         }
       },
@@ -22,7 +22,12 @@
       "custom": {
         "endpoint": {
           "sourceDir": "lambda/custom"
-        }
+        },
+        "interfaces": [
+          {
+            "type": "ALEXA_PRESENTATION_APL"
+          }
+        ]
       }
     },
     "manifestVersion": "1.0"

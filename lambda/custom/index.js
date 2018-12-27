@@ -8,7 +8,16 @@ const words = require('./words');
 
 const rounds = 10; // how many rounds in a game?
 
-// todo fix game crashes if two consecutive no's given for name (error exceeded max reprompts)//
+const { logoUrl } = constants;
+let message = constants.hasScreen.defaultMessage;
+const hintText = functions.shuffle(constants.hasScreen.hintText)[0];
+const {
+  background,
+  defaultTitle,
+  defaultSubTitle,
+  noVideoSupport,
+} = constants.hasScreen;
+let displayParams = {};
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
@@ -26,18 +35,37 @@ const LaunchRequestHandler = {
       ? functions.shuffle(constants.phrasePool.salutation)[0]
       : "Welcome to Super Sight Words! <audio src='soundbank://soundlibrary/musical/amzn_sfx_trumpet_bugle_03'/> I'm very excited to learn to read 1,000 new words with you. <prosody rate=\"fast\"> Let's get started!</prosody>";
     const repromptText = speechText;
-    persistentAttributes.passTo = false;
-
-    persistentAttributes.repeatText = speechText;
 
     // set persistentAttributes to sessionAttributes //
     // reset from previous game to be safe //
     attributesManager.setSessionAttributes(persistentAttributes);
     const sessionAttributes = attributesManager.getSessionAttributes();
+    sessionAttributes.hasScreen = !!functions.supportsDisplay(handlerInput);
+    sessionAttributes.passTo = false;
+    sessionAttributes.repeatText = speechText;
     sessionAttributes.inGame = false;
     sessionAttributes.currentTurn = 0;
     sessionAttributes.score = 0;
     sessionAttributes.wordsList = [];
+
+    if (sessionAttributes.hasScreen) {
+      displayParams = {
+        logoUrl,
+        background,
+        smImgUrl: functions.shuffle(constants.hasScreen.helloImages)[0],
+        lgImgUrl: functions.shuffle(constants.hasScreen.helloImages)[0],
+        title: defaultTitle,
+        subTitle: defaultSubTitle,
+        message: null,
+        hintText,
+      };
+
+      return responseBuilder
+        .speak(`${salutation} ${speechText}`)
+        .reprompt(repromptText)
+        .addDirective(functions.getDisplayData(displayParams))
+        .getResponse();
+    }
 
     return responseBuilder
       .speak(`${salutation} ${speechText}`)
@@ -151,22 +179,37 @@ const StartGameIntentHandler = {
       sessionAttributes.currentTurn
     );
     const repromptText = spellWord;
+    message = spellWord;
     sessionAttributes.word = sayWord;
     sessionAttributes.repeatText = `${speechText} <break time="0.50s" /> ${spellWord}`;
     sessionAttributes.currentTurn += 1;
 
+    if (sessionAttributes.hasScreen) {
+      displayParams = {
+        logoUrl,
+        background,
+        smImgUrl: functions.shuffle(constants.hasScreen.helloImages)[0],
+        lgImgUrl: functions.shuffle(constants.hasScreen.helloImages)[0],
+        title: sessionAttributes.playerInfo.name,
+        subTitle: '',
+        message: sessionAttributes.word.toUpperCase(),
+        hintText,
+      };
+
+      return responseBuilder
+        .speak(`${speechText} <break time="0.50s" /> ${spellWord}`)
+        .reprompt(repromptText)
+        .addDirective(functions.getDisplayData(displayParams))
+        .getResponse();
+    }
+
     return responseBuilder
       .speak(`${speechText} <break time="0.50s" /> ${spellWord}`)
       .reprompt(repromptText)
-      .withSimpleCard(
-        `${sessionAttributes.playerInfo.name}`,
-        sessionAttributes.word
-      )
       .getResponse();
   },
 };
 
-// ! slow ! //
 const GameLoopHandler = {
   canHandle(handlerInput) {
     const { request } = handlerInput.requestEnvelope;
@@ -219,6 +262,35 @@ const GameLoopHandler = {
     sessionAttributes.repeatText = `${speechText} <break time="0.50s" /> ${spellWord}`;
     sessionAttributes.currentTurn += 1;
 
+    if (sessionAttributes.hasScreen) {
+      const { score } = sessionAttributes;
+      displayParams = {
+        logoUrl,
+        background,
+        smImgUrl:
+          score > 0
+            ? constants.hasScreen.pointsImages[sessionAttributes.score]
+            : functions.shuffle(constants.hasScreen.helloImages)[0],
+        lgImgUrl:
+          score > 0
+            ? constants.hasScreen.pointsImages[sessionAttributes.score]
+            : functions.shuffle(constants.hasScreen.helloImages)[0],
+        title: `${sessionAttributes.playerInfo.name}`,
+        subTitle: '',
+        message: sessionAttributes.word.toUpperCase(),
+        hintText,
+      };
+      return responseBuilder
+        .speak(
+          `${resultsText} <break time="0.50s" />
+        ${speechText} <break time="0.25s" />
+        ${spellWord}`
+        )
+        .reprompt(repromptText)
+        .addDirective(functions.getDisplayData(displayParams))
+        .getResponse();
+    }
+
     return responseBuilder
       .speak(
         `${resultsText} <break time="0.50s" />
@@ -226,11 +298,6 @@ const GameLoopHandler = {
         ${spellWord}`
       )
       .reprompt(repromptText)
-      .withSimpleCard(
-        `>> ${sessionAttributes.playerInfo.name} <<\n
-        ${sessionAttributes.score}  \\  ${sessionAttributes.currentTurn - 1}`,
-        sessionAttributes.word
-      )
       .getResponse();
   },
 };
@@ -249,12 +316,10 @@ const EndGameIntentHandler = {
     const { attributesManager, responseBuilder } = handlerInput;
     const sessionAttributes = attributesManager.getSessionAttributes();
     const { name } = sessionAttributes.playerInfo;
-    const randomModifier = functions.getRandomInt(0, 999);
+    const randomModifier = functions.getRandomInt(0, 99);
     sessionAttributes.passTo = false;
     sessionAttributes.inGame = false;
 
-    // todo calculate final score //
-    // ((right / rounds) * (level / length of wordsList array) * 10000) //
     const finalScore =
       Math.round(
         (sessionAttributes.score / rounds) *
@@ -264,17 +329,41 @@ const EndGameIntentHandler = {
     attributesManager.setPersistentAttributes(sessionAttributes);
     await attributesManager.savePersistentAttributes();
 
+    if (sessionAttributes.hasScreen) {
+      const { score } = sessionAttributes;
+      displayParams = {
+        logoUrl,
+        background,
+        smImgUrl:
+          score < rounds
+            ? constants.hasScreen.pointsImages[sessionAttributes.score]
+            : functions.shuffle(constants.hasScreen.winnerImages)[0],
+        lgImgUrl:
+          score < rounds
+            ? constants.hasScreen.pointsImages[sessionAttributes.score]
+            : functions.shuffle(constants.hasScreen.winnerImages)[0],
+        title: `${name}'s Final Score`,
+        subTitle: '',
+        message: finalScore,
+        hintText,
+      };
+      return responseBuilder
+        .speak(
+          `${resultsText} <break time="0.50s" /> Thanks for playing ${name}!
+        You got ${sessionAttributes.score} correct.
+        Your final score was ${finalScore}.
+        And you played level ${sessionAttributes.playerInfo.level}`
+        )
+        .addDirective(functions.getDisplayData(displayParams))
+        .getResponse();
+    }
+
     return responseBuilder
       .speak(
         `${resultsText} <break time="0.50s" /> Thanks for playing ${name}!
         You got ${sessionAttributes.score} correct.
         Your final score was ${finalScore}.
         And you played level ${sessionAttributes.playerInfo.level}`
-      )
-      .withSimpleCard(
-        `Thanks for playing ${name}!
-        You got ${sessionAttributes.score} correct.
-        Your final score was ${finalScore}. `
       )
       .getResponse();
   },
@@ -405,7 +494,6 @@ const ResetIntentHandler = {
   },
 };
 
-// todo pass what player said to guessHint -> very cool! //
 const FallBackHandler = {
   canHandle(handlerInput) {
     const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();

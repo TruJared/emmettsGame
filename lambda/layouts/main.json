@@ -1,0 +1,185 @@
+{
+  "type": "APL",
+  "version": "1.0",
+  "theme": "dark",
+  "import": [
+    {
+      "name": "alexa-styles",
+      "version": "1.0.0"
+    },
+    {
+      "name": "alexa-layouts",
+      "version": "1.0.0"
+    },
+    {
+      "name": "alexa-profiles",
+      "version": "1.0.0"
+    }
+  ],
+  "resources": [
+    {
+      "description": "background image",
+      "strings": {
+        "backgroundImg": "https://s3.amazonaws.com/emmetts-game/chalkboard-517818_1920.jpg"
+      }
+    }
+  ],
+  "styles": {
+    "mainFont": {
+      "values": [
+        {
+          "color": "#1ce",
+          "fontFamily": "@fontFamilyRomanSerif",
+          "fontWeight": "@fontWeightLight",
+          "fontSize": "@fontSizeLarge",
+          "letterSpacing": "@letterSpacingExpanded"
+        }
+      ]
+    }
+  },
+  "layouts": {
+    "BackgroundImage": {
+      "parameters": ["imgSrc"],
+      "items": [
+        {
+          "type": "Image",
+          "source": "${imgSrc}",
+          "height": "100vh",
+          "width": "100vw",
+          "position": "absolute",
+          "scale": "best-fill"
+        }
+      ]
+    }
+  },
+  "mainTemplate": {
+    "parameters": ["datasource"],
+    "items": [
+      {
+        "type": "Container",
+        "width": "100vw",
+        "height": "100vh",
+        "direction": "column",
+        "items": [
+          {
+            "type": "BackgroundImage",
+            "imgSrc": "@backgroundImg"
+          },
+          {
+            "when": "${@viewportProfile == @hubRoundSmall}",
+            "type": "Container",
+            "width": "100vw",
+            "height": "100vh",
+            "alignItems": "center",
+            "direction": "column",
+            "items": [
+              {
+                "type": "Text",
+                "text": "Name: ${datasource.main.properties.name}",
+                "style": "mainFont",
+                "paddingTop": "10vh",
+                "paddingBottom": "5vh"
+              },
+              {
+                "type": "Frame",
+                "backgroundColor": "rgba(255, 255, 255, 0.30)",
+                "width": "65vw",
+                "borderWidth": "5px",
+                "borderColor": "black",
+                "borderRadius": "50",
+                "item": [
+                  {
+                    "type": "Text",
+                    "text": "${datasource.main.properties.word}",
+                    "color": "#232323",
+                    "height": "60vh",
+                    "textAlign": "center",
+                    "textAlignVertical": "center",
+                    "fontSize": "9.5vw",
+                    "fontWeight": "@fontWeightRegular"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "when": "${@viewportProfile != @hubRoundSmall}",
+            "type": "AlexaHeader",
+            "headerTitle": "${datasource.main.properties.headerTitle}",
+            "headerAttributionImage": "${datasource.main.properties.logo}",
+            "position": "relative"
+          },
+          {
+            "when": "${@viewportProfile != @hubRoundSmall}",
+            "type": "Container",
+            "width": "100vw",
+            "height": "100vh",
+            "paddingLeft": "3vw",
+            "direction": "row",
+            "items": [
+              {
+                "type": "Container",
+                "width": "70vw",
+                "height": "100vh",
+                "direction": "column",
+                "items": [
+                  {
+                    "type": "Text",
+                    "text": "Name: ${datasource.main.properties.name}",
+                    "style": "mainFont",
+                    "paddingBottom": "2vh",
+                    "paddingLeft": "5vw"
+                  },
+                  {
+                    "type": "Frame",
+                    "backgroundColor": "rgba(255, 255, 255, 0.30)",
+                    "width": "65vw",
+                    "borderWidth": "5px",
+                    "borderColor": "black",
+                    "borderRadius": "50",
+                    "item": [
+                      {
+                        "type": "Text",
+                        "text": "${datasource.main.properties.word}",
+                        "color": "#232323",
+                        "height": "60vh",
+                        "textAlign": "center",
+                        "textAlignVertical": "center",
+                        "fontSize": "9.5vw",
+                        "fontWeight": "@fontWeightRegular"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "Container",
+                "width": "30vw",
+                "height": "100vh",
+                "direction": "column",
+                "paddingRight": "5vw",
+                "items": [
+                  {
+                    "type": "Text",
+                    "text": "${datasource.main.properties.round}",
+                    "style": "mainFont",
+                    "textAlign": "center",
+                    "paddingBottom": "3vh"
+                  },
+                  {
+                    "type": "Image",
+                    "source": "${datasource.main.properties.correctUrl}",
+                    "width": "100%",
+                    "height": "55vh",
+                    "scale": "best-fit",
+                    "align": "bottom"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

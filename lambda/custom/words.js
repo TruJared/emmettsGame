@@ -251,7 +251,6 @@ exports.wordsList = {
     'idea',
     'important',
     'Indian',
-    'it’s',
     'keep',
     'last',
     'late',

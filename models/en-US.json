@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "super sight words",
+      "invocationName": "let's read",
       "intents": [
         {
           "name": "AMAZON.FallbackIntent",
