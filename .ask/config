@@ -20,7 +20,7 @@
         },
         "interactionModel": {
           "en-US": {
-            "eTag": "6667a411cebc9bc1928cb99750e33b7f"
+            "eTag": "4ca8f25fb9b766aa654842afd5e8bb4c"
           }
         },
         "lambda": [
@@ -33,7 +33,7 @@
             "codeUri": "lambda/custom",
             "functionName": "arn:aws:lambda:us-east-1:139829371454:function:ask-custom-emmettsGame-default",
             "handler": "index.handler",
-            "revisionId": "dbcb0eb9-9954-47c5-b07a-0af8c1789e7f",
+            "revisionId": "af8159d8-907f-481c-bd6f-928008375f11",
             "runtime": "nodejs8.10"
           }
         ]

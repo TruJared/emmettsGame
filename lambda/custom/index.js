@@ -2,22 +2,25 @@ const Alexa = require('ask-sdk');
 
 const constants = require('./constants');
 const functions = require('./functions');
+const intro = require('./intro.json');
+const main = require('./main.json');
 
 const { responses } = constants;
 const words = require('./words');
 
 const rounds = 10; // how many rounds in a game?
 
-const { logoUrl } = constants;
-let message = constants.hasScreen.defaultMessage;
-const hintText = functions.shuffle(constants.hasScreen.hintText)[0];
-const {
-  background,
-  defaultTitle,
-  defaultSubTitle,
-  noVideoSupport,
-} = constants.hasScreen;
-let displayParams = {};
+// default params for visual elements
+const displayParams = {
+  headerTitle: constants.hasScreen.defaultTitle,
+  logoUrl: constants.logoUrl,
+  name: '',
+  word: '',
+  round: '# Correct',
+  imageUrl: functions.shuffle(constants.hasScreen.helloImages)[0],
+  hintText: functions.shuffle(constants.hasScreen.hintText)[0],
+};
+// todo handle bug where user says their name as a site word i.e. "fell" //
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
@@ -33,7 +36,7 @@ const LaunchRequestHandler = {
     )[0];
     const salutation = !persistentAttributes.newUser
       ? functions.shuffle(constants.phrasePool.salutation)[0]
-      : "Welcome to Super Sight Words! <audio src='soundbank://soundlibrary/musical/amzn_sfx_trumpet_bugle_03'/> I'm very excited to learn to read 1,000 new words with you. <prosody rate=\"fast\"> Let's get started!</prosody>";
+      : "Welcome to Let's Read! <audio src='soundbank://soundlibrary/musical/amzn_sfx_trumpet_bugle_03'/> I'm very excited to learn to read 1,000 new words with you. <prosody rate=\"fast\"> Let's get started!</prosody>";
     const repromptText = speechText;
 
     // set persistentAttributes to sessionAttributes //
@@ -48,22 +51,24 @@ const LaunchRequestHandler = {
     sessionAttributes.score = 0;
     sessionAttributes.wordsList = [];
 
-    if (sessionAttributes.hasScreen) {
-      displayParams = {
-        logoUrl,
-        background,
-        smImgUrl: functions.shuffle(constants.hasScreen.helloImages)[0],
-        lgImgUrl: functions.shuffle(constants.hasScreen.helloImages)[0],
-        title: defaultTitle,
-        subTitle: defaultSubTitle,
-        message: null,
-        hintText,
-      };
+    // reset display params too
+    displayParams.headerTitle = constants.hasScreen.defaultTitle;
+    displayParams.logoUrl = constants.logoUrl;
+    displayParams.name = '';
+    displayParams.word = '';
+    displayParams.round = '# Correct';
+    // eslint-disable-next-line prefer-destructuring
+    displayParams.imageUrl = functions.shuffle(
+      constants.hasScreen.helloImages
+    )[0];
+    // eslint-disable-next-line prefer-destructuring
+    displayParams.hintText = functions.shuffle(constants.hasScreen.hintText)[0];
 
+    if (sessionAttributes.hasScreen) {
       return responseBuilder
         .speak(`${salutation} ${speechText}`)
         .reprompt(repromptText)
-        .addDirective(functions.getDisplayData(displayParams))
+        .addDirective(functions.getDisplayData(intro, displayParams))
         .getResponse();
     }
 
@@ -87,11 +92,12 @@ const GetPlayerInfoInProgress = {
     );
   },
   async handle(handlerInput) {
-    const { responseBuilder } = handlerInput;
+    const { responseBuilder, requestEnvelope } = handlerInput;
+    const currentIntent = requestEnvelope.request.intent;
     const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
     sessionAttributes.passTo = false;
 
-    return responseBuilder.addDelegateDirective().getResponse();
+    return responseBuilder.addDelegateDirective(currentIntent).getResponse();
   },
 };
 
@@ -179,27 +185,19 @@ const StartGameIntentHandler = {
       sessionAttributes.currentTurn
     );
     const repromptText = spellWord;
-    message = spellWord;
     sessionAttributes.word = sayWord;
     sessionAttributes.repeatText = `${speechText} <break time="0.50s" /> ${spellWord}`;
     sessionAttributes.currentTurn += 1;
 
-    if (sessionAttributes.hasScreen) {
-      displayParams = {
-        logoUrl,
-        background,
-        smImgUrl: functions.shuffle(constants.hasScreen.helloImages)[0],
-        lgImgUrl: functions.shuffle(constants.hasScreen.helloImages)[0],
-        title: sessionAttributes.playerInfo.name,
-        subTitle: '',
-        message: sessionAttributes.word.toUpperCase(),
-        hintText,
-      };
+    // set up display params
+    displayParams.word = sayWord.toUpperCase();
+    displayParams.name = `Name: ${sessionAttributes.playerInfo.name.toUpperCase()}`;
 
+    if (sessionAttributes.hasScreen) {
       return responseBuilder
         .speak(`${speechText} <break time="0.50s" /> ${spellWord}`)
         .reprompt(repromptText)
-        .addDirective(functions.getDisplayData(displayParams))
+        .addDirective(functions.getDisplayData(main, displayParams))
         .getResponse();
     }
 
@@ -232,8 +230,12 @@ const GameLoopHandler = {
 
     // check answer and load response
     const resultsText = isRight
-      ? 'You are correct!'
-      : `No, sorry, the correct answer was ${sessionAttributes.word}`;
+      ? `${functions.shuffle(responses.correct.sound)[0]} ${
+          functions.shuffle(responses.correct.phrase)[0]
+        }`
+      : `${functions.shuffle(responses.incorrect.sound)[0]} ${
+          functions.shuffle(responses.incorrect.phrase)[0]
+        }`;
 
     // update score
     sessionAttributes.score += isRight ? 1 : 0;
@@ -262,24 +264,16 @@ const GameLoopHandler = {
     sessionAttributes.repeatText = `${speechText} <break time="0.50s" /> ${spellWord}`;
     sessionAttributes.currentTurn += 1;
 
+    // set up display parameters
+    displayParams.round = '# Correct';
+    displayParams.name = `Name: ${sessionAttributes.playerInfo.name.toUpperCase()}`;
+    displayParams.word = sayWord.toUpperCase();
+    displayParams.imageUrl =
+      sessionAttributes.score > 0
+        ? constants.hasScreen.roundImages[sessionAttributes.score]
+        : displayParams.imageUrl;
+
     if (sessionAttributes.hasScreen) {
-      const { score } = sessionAttributes;
-      displayParams = {
-        logoUrl,
-        background,
-        smImgUrl:
-          score > 0
-            ? constants.hasScreen.pointsImages[sessionAttributes.score]
-            : functions.shuffle(constants.hasScreen.helloImages)[0],
-        lgImgUrl:
-          score > 0
-            ? constants.hasScreen.pointsImages[sessionAttributes.score]
-            : functions.shuffle(constants.hasScreen.helloImages)[0],
-        title: `${sessionAttributes.playerInfo.name}`,
-        subTitle: '',
-        message: sessionAttributes.word.toUpperCase(),
-        hintText,
-      };
       return responseBuilder
         .speak(
           `${resultsText} <break time="0.50s" />
@@ -287,7 +281,7 @@ const GameLoopHandler = {
         ${spellWord}`
         )
         .reprompt(repromptText)
-        .addDirective(functions.getDisplayData(displayParams))
+        .addDirective(functions.getDisplayData(main, displayParams))
         .getResponse();
     }
 
@@ -329,43 +323,36 @@ const EndGameIntentHandler = {
     attributesManager.setPersistentAttributes(sessionAttributes);
     await attributesManager.savePersistentAttributes();
 
-    if (sessionAttributes.hasScreen) {
-      const { score } = sessionAttributes;
-      displayParams = {
-        logoUrl,
-        background,
-        smImgUrl:
-          score < rounds
-            ? constants.hasScreen.pointsImages[sessionAttributes.score]
-            : functions.shuffle(constants.hasScreen.winnerImages)[0],
-        lgImgUrl:
-          score < rounds
-            ? constants.hasScreen.pointsImages[sessionAttributes.score]
-            : functions.shuffle(constants.hasScreen.winnerImages)[0],
-        title: `${name}'s Final Score`,
-        subTitle: '',
-        message: finalScore,
-        hintText,
-      };
-      return responseBuilder
-        .speak(
-          `${resultsText} <break time="0.50s" /> Thanks for playing ${name}!
-        You got ${sessionAttributes.score} correct.
-        Your final score was ${finalScore}.
+    // * not clean * 🚿 //
+    const speechText =
+      sessionAttributes.score > rounds
+        ? `${resultsText} <break time="0.50s" /> Thanks for playing ${name}! You got ${
+            sessionAttributes.score
+          } correct. Your final score was ${finalScore}.
         And you played level ${sessionAttributes.playerInfo.level}`
-        )
-        .addDirective(functions.getDisplayData(displayParams))
+        : `${resultsText} <break time="0.50s" /> Thanks for playing ${name}! You got them all correct!
+        <audio src='soundbank://soundlibrary/impacts/amzn_sfx_fireworks_whistles_01'/> Your final score was ${finalScore}. And you played level ${
+            sessionAttributes.playerInfo.level
+          }`;
+
+    // set up display parameters
+    displayParams.name = `Final Score`;
+    displayParams.word = finalScore;
+    displayParams.round =
+      sessionAttributes.score < rounds ? 'Thanks!' : 'Perfect!';
+    displayParams.imageUrl =
+      sessionAttributes.score < rounds
+        ? functions.shuffle(constants.hasScreen.helloImages)[0]
+        : functions.shuffle(constants.hasScreen.winnerImages)[0];
+
+    if (sessionAttributes.hasScreen) {
+      return responseBuilder
+        .speak(speechText)
+        .addDirective(functions.getDisplayData(main, displayParams))
         .getResponse();
     }
 
-    return responseBuilder
-      .speak(
-        `${resultsText} <break time="0.50s" /> Thanks for playing ${name}!
-        You got ${sessionAttributes.score} correct.
-        Your final score was ${finalScore}.
-        And you played level ${sessionAttributes.playerInfo.level}`
-      )
-      .getResponse();
+    return responseBuilder.speak(speechText).getResponse();
   },
 };
 
@@ -498,19 +485,16 @@ const FallBackHandler = {
   canHandle(handlerInput) {
     const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
     return (
-      handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
-      (handlerInput.requestEnvelope.request.intent.name ===
-        'AMAZON.FallbackIntent' ||
-        (handlerInput.requestEnvelope.request.intent.name ===
-          'GetPlayerInfoIntent' &&
-          sessionAttributes.inGame))
+      (handlerInput.requestEnvelope.request.type === 'IntentRequest' &&
+        handlerInput.requestEnvelope.request.intent.name ===
+          'AMAZON.FallbackIntent') ||
+      handlerInput.requestEnvelope.request.intent.name === 'GetPlayerInfoIntent'
     );
   },
   async handle(handlerInput) {
     const { responseBuilder } = handlerInput;
     const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
     const speechText = functions.shuffle(constants.phrasePool.fallback)[0];
-
     const hint = sessionAttributes.inGame
       ? `You could try saying, ${
           functions.shuffle(constants.guessHints)[0]

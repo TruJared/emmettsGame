@@ -1286,19 +1286,19 @@
         "variations": [
           {
             "type": "PlainText",
-            "value": "This game has ten levels, one is the easiest and ten is the hardest, which would you like to try?"
+            "value": "This game has ten levels, one has an easier word mix and ten has a harder word mix. You get points based on how hard the level is and on how many words you get correct. Which level do you want to play?"
           },
           {
             "type": "PlainText",
-            "value": "Pick a level one through ten, ten is the hardest and one is the easiest."
+            "value": "Pick a level one through ten, ten has a more difficult word mix, while one has an easier word mix. I'll award you points based on how difficult a level is and on how many words you get correct."
           },
           {
             "type": "PlainText",
-            "value": "There are ten levels of words to spell, level one has the easiest words and level ten has the hardest words. Which level would you like to try?"
+            "value": "There are ten levels of words to spell, level one has the easiest word mix and level ten has the hardest word mix. A harder level will award more points, but getting a lot of words correct at a lower level will get more points than only getting a few correct at a higher level. Which level would you like to try? "
           },
           {
             "type": "PlainText",
-            "value": "Please pick a level, one through ten. One is the easiest and ten is the hardest."
+            "value": "Please pick a level, one through ten. One has the easiest mix of words and ten has the hardest mix. More points are awarded for higher levels."
           }
         ]
       },
@@ -1358,7 +1358,7 @@
         "variations": [
           {
             "type": "PlainText",
-            "value": "{number} is too big. please choose a number below ten"
+            "value": "{number} is too big. please choose ten or below."
           }
         ]
       },
@@ -1367,7 +1367,7 @@
         "variations": [
           {
             "type": "PlainText",
-            "value": "{number} is too small, please choose a bigger number"
+            "value": "{number} is too small, please choose a bigger number."
           }
         ]
       }

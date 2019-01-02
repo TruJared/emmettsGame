@@ -9,23 +9,20 @@ const persistentAttributesAtStart = {
   newUser: true,
 };
 
-const logoUrl = 'https://s3.amazonaws.com/emmetts-game/icon_512_A2Z.png';
+const logoUrl = 'https://s3.amazonaws.com/emmetts-game/letsRead-logo.png';
 
 const hasScreen = {
-  background:
-    'https://s3.amazonaws.com/emmetts-game/chalkboard-517818_1920.jpg',
-  defaultTitle: '',
-  defaultSubTitle: '',
-  defaultMessage: '',
+  defaultTitle: "Let's Read",
   hintText: [
-    'If you like this skill please rate it 🌟🌟🌟🌟🌟 on Amazon, Thanks!',
+    'If you like this skill please give it some 🌟s on Amazon, Thanks!',
     'If you like this skill please share 💬 it with a friend',
-    'Made with ❤️ by Jared Makes 💻 jaredmakes.com ',
-    'Thanks for playing my game. - Jared - ',
-    'Any feedback can be sent to 📧 jared@jaredmakes.com',
-    "Please take a minute to write ✏️ a review on Amazon. It's a huge help to us developers!",
+    'Made with ❤️ by J 💻 jaredmakes.com ',
+    'Thanks for playing my game. -J ✌️',
+    'Any feedback can be sent to 📧 feedback@jaredmakes.com',
+    "Please take a minute to write ✏️ a review on Amazon for any skills you like. It's a huge help to us developers!",
     '❤️ Ratings 🌟🌟🌟🌟🌟 and reviews 💻 are appreciated! ❤️',
-    'Thanks for playing. I had a lot of fun making this. - Jared - 😄',
+    'Thanks for playing. I had a lot of fun making this. - J 😄',
+    'Special thanks to Em and Aud for all the help testing this!',
   ],
   noVideoSupport: 'Sorry this device does not support video',
   helloImages: [
@@ -43,7 +40,7 @@ const hasScreen = {
     'https://s3.amazonaws.com/emmetts-game/winner/medal-1622523_640.png',
     'https://s3.amazonaws.com/emmetts-game/winner/trophy-153395_640.png',
   ],
-  pointsImages: {
+  roundImages: {
     1: 'https://s3.amazonaws.com/emmetts-game/numbers/counting-149951_640.png',
     2: 'https://s3.amazonaws.com/emmetts-game/numbers/counting-149952_640.png',
     3: 'https://s3.amazonaws.com/emmetts-game/numbers/counting-149953_640.png',
@@ -80,13 +77,45 @@ const responses = {
       'You look like you are ready to get started. Before we begin would you like me to review the rules?',
       'I think you are going to do great! Before we begin would you like me to review the rules?',
       "Let's get to reading! Before we begin would you like me to review the rules?",
-      "Let's get to reading! Before we begin should I explain the rules",
+      "Let's get to reading! Before we begin should I explain the rules?",
     ],
   },
   helpResponse: {
     speechText:
       "<audio src='soundbank://soundlibrary/magic/amzn_sfx_fairy_melodic_chimes_01'/> I am the happy-helpy-helper-help-and-hint-menu. You can say help at anytime to hear these rules again. <break time='0.25s' /> Once the game starts I will spell a word for you. I'll wait for you to tell me the word as fast as you can, but you only have a short amount of time, so don't wait too long. You should try to speak clearly. I'm still learning to listen, so sometimes I don't hear you very well; if that happens, I'll give you a hint to help me listen better.<break time='0.50s' /> Do you need to hear the instructions again?",
     repromptText: ' Do you need to hear the instructions again?',
+  },
+  correct: {
+    sound: [
+      "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_01'/>",
+      "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_positive_response_02'/>",
+    ],
+    phrase: [
+      "Awesome job! That's correct.",
+      'You are so smart, that is the correct answer!',
+      'Whoa! You are a reading champ!',
+      "Now that's how you read! Great work!",
+      "I'm so proud of your reading skills!",
+      'You are a great reader!',
+      'Well done!',
+      'Excellent!',
+      'Fantastic!',
+    ],
+  },
+  incorrect: {
+    sound: [
+      "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_negative_response_01'/>",
+      "<audio src='soundbank://soundlibrary/ui/gameshow/amzn_ui_sfx_gameshow_negative_response_02'/>",
+    ],
+    phrase: [
+      'Oops! Not quite.',
+      'So close!',
+      'Shucks, just missed it.',
+      "Not quite right, but I can tell you're getting better.",
+      'Keep practicing, you are definitely getting better. You were really close on that one.',
+      'Just missed it.',
+      'That was really close, but not quite right',
+    ],
   },
 };
 

@@ -1,11 +1,16 @@
-const mainDoc = require('./main.json');
-
 const getWord = (wordsList, turn) => {
-  const speechText = 'The word is ';
+  const speechText = [
+    'The word is ',
+    'What word is this?',
+    "Here's a new word for you",
+    'Tell me what this spells',
+    'O.K. hotshot, tell me what this word is.',
+    "I'm having so much fun, can you tell me what this word spells?",
+  ];
   const sayWord = wordsList[turn]; // cat
   const spellWord = sayWord.split('').join(', '); // c, a, t
   return {
-    speechText,
+    speechText: shuffle(speechText)[0],
     sayWord,
     spellWord,
   };
@@ -17,83 +22,49 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (high - low + 1)) + low;
 };
 
-const getDisplayData = displayParams => {
+const getDisplayData = (template, displayParams) => {
   const {
+    headerTitle,
     logoUrl,
-    background,
-    smImgUrl,
-    lgImgUrl = smImgUrl,
-    title,
-    subTitle,
-    message,
+    name,
+    word,
+    round,
+    imageUrl,
     hintText,
   } = displayParams;
+
   const datasources = {
-    bodyTemplate2Data: {
+    main: {
       type: 'object',
-      objectId: 'bt2Sample',
-      backgroundImage: {
-        contentDescription: null,
-        smallSourceUrl: null,
-        largeSourceUrl: null,
-        sources: [
-          {
-            url: background,
-            size: 'small',
-            widthPixels: 0,
-            heightPixels: 0,
-          },
-          {
-            url: background,
-            size: 'large',
-            widthPixels: 0,
-            heightPixels: 0,
-          },
-        ],
+      properties: {
+        headerTitle,
+        logoUrl,
+        name,
+        word,
+        round,
+        imageUrl,
+        hintText,
       },
-      title: "Let's Read",
-      image: {
-        contentDescription: null,
-        smallSourceUrl: null,
-        largeSourceUrl: null,
-        sources: [
-          {
-            url: smImgUrl,
-            size: 'small',
-            widthPixels: 0,
-            heightPixels: 0,
-          },
-          {
-            url: lgImgUrl,
-            size: 'large',
-            widthPixels: 0,
-            heightPixels: 0,
-          },
-        ],
-      },
-      textContent: {
-        title: {
-          type: 'PlainText',
-          text: title,
+      transform: [
+        {
+          inputPath: word,
+          outputName: 'synchronizedText',
+          transformer: 'ssmlToText',
         },
-        subtitle: {
-          type: 'PlainText',
-          text: subTitle,
+        {
+          inputPath: word,
+          outputName: 'synchronizedSpeech',
+          transformer: 'ssmlToSpeech',
         },
-        primaryText: {
-          type: 'PlainText',
-          text: message,
-        },
-      },
-      logoUrl,
-      hintText,
+      ],
     },
   };
 
   return {
     type: 'Alexa.Presentation.APL.RenderDocument',
     version: '1.0',
-    document: mainDoc,
+    token: 'syncronizedTextToken',
+    document: template,
     datasources,
   };
 };

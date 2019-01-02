@@ -28,7 +28,7 @@
     "mainFont": {
       "values": [
         {
-          "color": "#1ce",
+          "color": "#00d4d4",
           "fontFamily": "@fontFamilyRomanSerif",
           "fontWeight": "@fontWeightLight",
           "fontSize": "@fontSizeLarge",
@@ -76,22 +76,16 @@
                 "type": "Text",
                 "text": "${datasource.main.properties.headerTitle}",
                 "style": "textStyleDisplay2",
-                "color": "#1ce",
+                "color": "#00d4d4",
                 "paddingBottom": "5vh",
-                "paddingTop": "8vh"
+                "paddingTop": "7vh"
               },
               {
                 "type": "Frame",
-                "backgroundColor": "rgba(255, 255, 255, 0.30)",
-                "width": "65vw",
-                "height": "50vh",
-                "borderWidth": "5px",
-                "borderColor": "white",
-                "borderRadius": "50",
-                "paddingTop": "5vh",
-                "paddingBottom": "5vh",
-                "paddingRight": "5vh",
-                "paddingLeft": "5vh",
+                "backgroundColor": "rgba(69, 90, 100, 0.30)",
+                "width": "100vw",
+                "height": "100vh",
+                "paddingTop": "3vh",
                 "item": [
                   {
                     "type": "Image",

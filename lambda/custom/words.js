@@ -225,7 +225,6 @@ exports.wordsList = {
     'close',
     'country',
     'cut',
-    'don’t',
     'earth',
     'eat',
     'enough',
