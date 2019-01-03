@@ -25,12 +25,16 @@ const hasScreen = {
     'Special thanks to Em and Aud for all the help testing this!',
   ],
   noVideoSupport: 'Sorry this device does not support video',
+  // have a couple empty strings to sometimes pass no image because the background is also kinda' cool.
+  // ! users probably won't like this ! //
   helloImages: [
     'https://s3.amazonaws.com/emmetts-game/hello/bear-150424_640.png',
     'https://s3.amazonaws.com/emmetts-game/hello/beaver-46221_640.png',
     'https://s3.amazonaws.com/emmetts-game/hello/bird-1771435_640.png',
     'https://s3.amazonaws.com/emmetts-game/hello/bird-1773616_640.png',
-    'https://s3.amazonaws.com/emmetts-game/hello/skeleton-1456627_640.png',
+    'https://s3.amazonaws.com/emmetts-game/hello/bird-1773656_640.png',
+    '',
+    '',
   ],
   winnerImages: [
     'https://s3.amazonaws.com/emmetts-game/winner/cup-1010909_640.jpg',
@@ -40,7 +44,8 @@ const hasScreen = {
     'https://s3.amazonaws.com/emmetts-game/winner/medal-1622523_640.png',
     'https://s3.amazonaws.com/emmetts-game/winner/trophy-153395_640.png',
   ],
-  roundImages: {
+  correctImages: {
+    0: 'https://s3.amazonaws.com/emmetts-game/numbers/counting-149950_640.png',
     1: 'https://s3.amazonaws.com/emmetts-game/numbers/counting-149951_640.png',
     2: 'https://s3.amazonaws.com/emmetts-game/numbers/counting-149952_640.png',
     3: 'https://s3.amazonaws.com/emmetts-game/numbers/counting-149953_640.png',
@@ -100,6 +105,15 @@ const responses = {
       'Well done!',
       'Excellent!',
       'Fantastic!',
+      'Good job. That was really good!',
+      'Good.',
+      'Great job!',
+      'Good work.',
+      'Nice work',
+      "You're on the champion list",
+      'Way to go!',
+      'Awesome!',
+      'Well done.',
     ],
   },
   incorrect: {
@@ -115,6 +129,9 @@ const responses = {
       'Keep practicing, you are definitely getting better. You were really close on that one.',
       'Just missed it.',
       'That was really close, but not quite right',
+      "Not quite, let's try another",
+      'Nice try.',
+      "You did really good, but that wasn't quite right",
     ],
   },
 };

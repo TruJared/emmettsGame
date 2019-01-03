@@ -288,7 +288,6 @@ exports.wordsList = {
     'soon',
     'start',
     'state',
-    'stop',
     'story',
     'talk',
     'those',

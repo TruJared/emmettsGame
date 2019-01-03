@@ -6,6 +6,9 @@ const getWord = (wordsList, turn) => {
     'Tell me what this spells',
     'O.K. hotshot, tell me what this word is.',
     "I'm having so much fun, can you tell me what this word spells?",
+    'What do these letters spell?',
+    'Can you tell me what this spells?',
+    "Here's a word I think you'll know",
   ];
   const sayWord = wordsList[turn]; // cat
   const spellWord = sayWord.split('').join(', '); // c, a, t

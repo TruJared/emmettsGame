@@ -20,7 +20,7 @@
     {
       "description": "background image",
       "strings": {
-        "backgroundImg": "https://s3.amazonaws.com/emmetts-game/chalkboard-517818_1920.jpg"
+        "backgroundImg": "https://s3.amazonaws.com/emmetts-game/background.jpg"
       }
     }
   ],
@@ -122,6 +122,7 @@
                 "width": "70vw",
                 "height": "100vh",
                 "direction": "column",
+                "paddingLeft": "2vw",
                 "items": [
                   {
                     "type": "Text",
@@ -132,10 +133,10 @@
                   },
                   {
                     "type": "Frame",
-                    "backgroundColor": "#F0F0F0",
+                    "backgroundColor": "white",
                     "width": "65vw",
-                    "borderWidth": "2px",
-                    "borderColor": "#3F51B5",
+                    "borderWidth": "10px",
+                    "borderColor": "black",
                     "borderRadius": "50",
                     "item": [
                       {
@@ -143,7 +144,7 @@
                         "id": "syncronizedSpeechComponentId",
                         "text": "${datasource.main.properties.word}",
                         "speech": "${datasource.main.properties.word}",
-                        "color": "#555555",
+                        "color": "#333",
                         "height": "60vh",
                         "textAlign": "center",
                         "textAlignVertical": "center",

@@ -33,7 +33,7 @@
             "codeUri": "lambda/custom",
             "functionName": "arn:aws:lambda:us-east-1:139829371454:function:ask-custom-emmettsGame-default",
             "handler": "index.handler",
-            "revisionId": "af8159d8-907f-481c-bd6f-928008375f11",
+            "revisionId": "ab205b4d-516e-4b70-af0a-2ec40bc05e1a",
             "runtime": "nodejs8.10"
           }
         ]

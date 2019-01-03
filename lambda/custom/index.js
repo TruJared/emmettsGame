@@ -13,14 +13,17 @@ const rounds = 10; // how many rounds in a game?
 // default params for visual elements
 const displayParams = {
   headerTitle: constants.hasScreen.defaultTitle,
-  logoUrl: constants.logoUrl,
+  logoUrl: '',
   name: '',
   word: '',
   round: '# Correct',
   imageUrl: functions.shuffle(constants.hasScreen.helloImages)[0],
   hintText: functions.shuffle(constants.hasScreen.hintText)[0],
 };
-// todo handle bug where user says their name as a site word i.e. "fell" //
+// todo better ending screen and events //
+// todo better help screen //
+// todo check for words that cause issues (i.e. close) //
+// todo fix if user says NAN for level //
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
@@ -53,7 +56,7 @@ const LaunchRequestHandler = {
 
     // reset display params too
     displayParams.headerTitle = constants.hasScreen.defaultTitle;
-    displayParams.logoUrl = constants.logoUrl;
+    displayParams.logoUrl = '';
     displayParams.name = '';
     displayParams.word = '';
     displayParams.round = '# Correct';
@@ -142,6 +145,35 @@ const GetPlayerInfoCompleted = {
   },
 };
 
+// * Players name is also a site word..
+// * Or Alexa thinks it is a site word..
+const PlayersNameIsWordHandler = {
+  canHandle(handlerInput) {
+    const { request } = handlerInput.requestEnvelope;
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+
+    return (
+      request.type === 'IntentRequest' &&
+      (request.intent.name === 'GameLoopIntent' &&
+        request.dialogState !== 'COMPLETED' &&
+        !sessionAttributes.inGame)
+    );
+  },
+  async handle(handlerInput) {
+    const { responseBuilder, requestEnvelope } = handlerInput;
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+    const speechText = `${
+      functions.shuffle(constants.phrasePool.fallback)[0]
+    }. Try introducing yourself by saying 'My name is', before telling me your name. What is your name?`;
+    sessionAttributes.passTo = false;
+
+    return responseBuilder
+      .speak(speechText)
+      .reprompt(speechText)
+      .getResponse();
+  },
+};
+
 const StartGameIntentHandler = {
   canHandle(handlerInput) {
     const { request } = handlerInput.requestEnvelope;
@@ -190,8 +222,11 @@ const StartGameIntentHandler = {
     sessionAttributes.currentTurn += 1;
 
     // set up display params
-    displayParams.word = sayWord.toUpperCase();
+    displayParams.round = '# Correct';
     displayParams.name = `Name: ${sessionAttributes.playerInfo.name.toUpperCase()}`;
+    displayParams.word = sayWord.toUpperCase();
+    displayParams.imageUrl =
+      constants.hasScreen.correctImages[sessionAttributes.score];
 
     if (sessionAttributes.hasScreen) {
       return responseBuilder
@@ -235,7 +270,7 @@ const GameLoopHandler = {
         }`
       : `${functions.shuffle(responses.incorrect.sound)[0]} ${
           functions.shuffle(responses.incorrect.phrase)[0]
-        }`;
+        }. The correct answer was ${sessionAttributes.word}`;
 
     // update score
     sessionAttributes.score += isRight ? 1 : 0;
@@ -269,9 +304,7 @@ const GameLoopHandler = {
     displayParams.name = `Name: ${sessionAttributes.playerInfo.name.toUpperCase()}`;
     displayParams.word = sayWord.toUpperCase();
     displayParams.imageUrl =
-      sessionAttributes.score > 0
-        ? constants.hasScreen.roundImages[sessionAttributes.score]
-        : displayParams.imageUrl;
+      constants.hasScreen.correctImages[sessionAttributes.score];
 
     if (sessionAttributes.hasScreen) {
       return responseBuilder
@@ -325,7 +358,7 @@ const EndGameIntentHandler = {
 
     // * not clean * 🚿 //
     const speechText =
-      sessionAttributes.score > rounds
+      sessionAttributes.score < rounds
         ? `${resultsText} <break time="0.50s" /> Thanks for playing ${name}! You got ${
             sessionAttributes.score
           } correct. Your final score was ${finalScore}.
@@ -496,14 +529,14 @@ const FallBackHandler = {
     const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
     const speechText = functions.shuffle(constants.phrasePool.fallback)[0];
     const hint = sessionAttributes.inGame
-      ? `You could try saying, ${
+      ? `Next time, before giving me your answer, try saying, ${
           functions.shuffle(constants.guessHints)[0]
-        },  to get my attention.`
+        }.`
       : '';
 
     return responseBuilder
       .speak(
-        `${speechText} ${hint}<break time="0.50s" /> ${
+        `${speechText} ${hint}<break time="0.20s" /> ${
           sessionAttributes.repeatText
         }`
       )
@@ -603,6 +636,7 @@ exports.handler = skillBuilder
     GetPlayerInfoInProgress,
     GetPlayerInfoCompleted,
     GameLoopHandler,
+    PlayersNameIsWordHandler,
     EndGameIntentHandler,
     HelpIntentHandler,
     YesIntentHandler,
