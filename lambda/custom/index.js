@@ -13,7 +13,7 @@ const rounds = 10; // how many rounds in a game?
 // default params for visual elements
 const displayParams = {
   headerTitle: constants.hasScreen.defaultTitle,
-  logoUrl: '',
+  logoUrl: constants.logoUrl,
   name: '',
   word: '',
   round: '# Correct',
@@ -22,8 +22,7 @@ const displayParams = {
 };
 // todo better ending screen and events //
 // todo better help screen //
-// todo check for words that cause issues (i.e. close) //
-// todo fix if user says NAN for level //
+// todo check for words that cause issues (i.e. wood and would) //
 
 const LaunchRequestHandler = {
   canHandle(handlerInput) {
@@ -56,7 +55,7 @@ const LaunchRequestHandler = {
 
     // reset display params too
     displayParams.headerTitle = constants.hasScreen.defaultTitle;
-    displayParams.logoUrl = '';
+    displayParams.logoUrl = constants.logoUrl;
     displayParams.name = '';
     displayParams.word = '';
     displayParams.round = '# Correct';

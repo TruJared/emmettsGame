@@ -9,7 +9,7 @@ const persistentAttributesAtStart = {
   newUser: true,
 };
 
-const logoUrl = 'https://s3.amazonaws.com/emmetts-game/letsRead-logo.png';
+const logoUrl = 'https://s3.amazonaws.com/emmetts-game/icon_108_A2Z.png';
 
 const hasScreen = {
   defaultTitle: "Let's Read",

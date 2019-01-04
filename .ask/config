@@ -16,11 +16,11 @@
       },
       "resources": {
         "manifest": {
-          "eTag": "ff9a15867a572b36c3644010587ecdee"
+          "eTag": "60a7f6609062952c382f4156a9cde024"
         },
         "interactionModel": {
           "en-US": {
-            "eTag": "4ca8f25fb9b766aa654842afd5e8bb4c"
+            "eTag": "3fcde89f4a2afac17aad290add72bb9c"
           }
         },
         "lambda": [
@@ -33,7 +33,7 @@
             "codeUri": "lambda/custom",
             "functionName": "arn:aws:lambda:us-east-1:139829371454:function:ask-custom-emmettsGame-default",
             "handler": "index.handler",
-            "revisionId": "ab205b4d-516e-4b70-af0a-2ec40bc05e1a",
+            "revisionId": "9cdb5cf4-aca6-4494-a4df-9bb604052e43",
             "runtime": "nodejs8.10"
           }
         ]
