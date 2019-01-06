@@ -1,14 +1,25 @@
 const getWord = (wordsList, turn) => {
   const speechText = [
     'The word is ',
-    'What word is this?',
-    "Here's a new word for you",
-    'Tell me what this spells',
+    'What word is this?', app.intent('g/', (conv) => {
+
+    });
+    "Here's a new word for you ",
+    'Tell me what this spells ',
     'O.K. hotshot, tell me what this word is.',
     "I'm having so much fun, can you tell me what this word spells?",
     'What do these letters spell?',
     'Can you tell me what this spells?',
-    "Here's a word I think you'll know",
+    "Here's a word I think you'll know ",
+    'I feel the need, the need to read. What does this spell?',
+    'What do you think this word is?',
+    'Can you get this one?',
+    'How about this?',
+    'Can you answer what this word is?',
+    'O.K., now what is this word?',
+    'The next word is ',
+    'Can you answer what this word is?',
+    'Here's the next one.'
   ];
   const sayWord = wordsList[turn]; // cat
   const spellWord = sayWord.split('').join(', '); // c, a, t

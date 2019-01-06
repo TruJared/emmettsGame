@@ -1,0 +1,55 @@
+{
+  "deploy_settings": {
+    "default": {
+      "skill_id": "amzn1.ask.skill.598bc3bb-7c67-4e31-8bc5-f295e268ca68",
+      "was_cloned": false,
+      "merge": {
+        "manifest": {
+          "apis": {
+            "custom": {
+              "endpoint": {
+                "uri": "ask-custom-emmettsGame-default"
+              }
+            }
+          }
+        }
+      },
+      "resources": {
+        "manifest": {
+<<<<<<< HEAD
+          "eTag": "ff9a15867a572b36c3644010587ecdee"
+        },
+        "interactionModel": {
+          "en-US": {
+            "eTag": "6667a411cebc9bc1928cb99750e33b7f"
+=======
+          "eTag": "60a7f6609062952c382f4156a9cde024"
+        },
+        "interactionModel": {
+          "en-US": {
+            "eTag": "3fcde89f4a2afac17aad290add72bb9c"
+>>>>>>> 5dbcd033df358e0fc9e0d7dd92d776c8480c5c51
+          }
+        },
+        "lambda": [
+          {
+            "alexaUsage": [
+              "custom/default"
+            ],
+            "arn": "arn:aws:lambda:us-east-1:139829371454:function:ask-custom-emmettsGame-default",
+            "awsRegion": "us-east-1",
+            "codeUri": "lambda/custom",
+            "functionName": "arn:aws:lambda:us-east-1:139829371454:function:ask-custom-emmettsGame-default",
+            "handler": "index.handler",
+<<<<<<< HEAD
+            "revisionId": "dbcb0eb9-9954-47c5-b07a-0af8c1789e7f",
+=======
+            "revisionId": "9cdb5cf4-aca6-4494-a4df-9bb604052e43",
+>>>>>>> 5dbcd033df358e0fc9e0d7dd92d776c8480c5c51
+            "runtime": "nodejs8.10"
+          }
+        ]
+      }
+    }
+  }
+}

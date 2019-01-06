@@ -1,0 +1,40 @@
+{
+  "deploy_settings": {
+    "default": {
+      "skill_id": "amzn1.ask.skill.598bc3bb-7c67-4e31-8bc5-f295e268ca68",
+      "was_cloned": false,
+      "merge": {
+        "manifest": {
+          "apis": {
+            "custom": {
+              "endpoint": {
+                "uri": "ask-custom-emmettsGame-default"
+              }
+            }
+          }
+        }
+      },
+      "resources": {
+        "manifest": {
+          "eTag": "209d4129d9e1487cd10625d5bac8027f"
+        },
+        "interactionModel": {
+          "en-US": {
+            "eTag": "19a5e427f1e2022c88d8a1bbc73f2f7c"
+          }
+        },
+        "lambda": [
+          {
+            "arn": "arn:aws:lambda:us-east-1:139829371454:function:ask-custom-emmettsGame-default",
+            "functionName": "arn:aws:lambda:us-east-1:139829371454:function:ask-custom-emmettsGame-default",
+            "awsRegion": "us-east-1",
+            "alexaUsage": [
+              "custom/default"
+            ],
+            "revisionId": "919370e3-f47c-436b-a3f3-fe3c71167b94"
+          }
+        ]
+      }
+    }
+  }
+}
