@@ -851,11 +851,6 @@
             },
             {
               "name": {
-                "value": "help"
-              }
-            },
-            {
-              "name": {
                 "value": "here"
               }
             },
@@ -1281,11 +1276,6 @@
             },
             {
               "name": {
-                "value": "close"
-              }
-            },
-            {
-              "name": {
                 "value": "country"
               }
             },
@@ -1617,11 +1607,6 @@
             {
               "name": {
                 "value": "state"
-              }
-            },
-            {
-              "name": {
-                "value": "stop"
               }
             },
             {

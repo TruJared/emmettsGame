@@ -4,11 +4,7 @@
       "locales": {
         "en-US": {
           "summary": "Help children learn to read by using Alexa. A fun game, with 10 levels, lots of variety, and nearly 1,000 sight words. Extra features for devices with screens!",
-          "examplePhrases": [
-            "Alexa, Let's Read.",
-            "Alexa tell Let's Read my name is Jared and I want to play level four.",
-            "Alexa open Let's Read."
-          ],
+          "examplePhrases": ["Alexa, Let's Read.", "Alexa open Let's Read."],
           "keywords": [
             "reading",
             "spelling",
@@ -34,7 +30,7 @@
           "smallIconUri": "https://s3.amazonaws.com/emmetts-game/icon_108_A2Z.png",
           "largeIconUri": "https://s3.amazonaws.com/emmetts-game/icon_512_A2Z.png",
           "name": "Let's Read",
-          "description": "Using Fry's list of 1,000 sight words, Let's Read teaches children how to read through fun interactions. \n\nThe game is easy to get started; just say, \"Hey Alexa Let's Read\", and Alexa will walk your child through getting the game started. Let's Read uses positive feedback to keep kids interested and coming back to play again and again. If you own a device with a screen, like the Echo Show, Alexa will display a flash card with the word and even display a count of the correct answers. This skill is an awesome addition to any classroom. I hope your child enjoys playing this game as much as I enjoyed working with my family building it! \nIf you enjoy this skill please rate and share, it really helps others discover this skill. Feedback is always appreciated: letsRead@jaredmakes.com \n\n * To quick start a challenge game (no screen images) users can say \"Alexa tell Let's Read my name is [Name], and I want to play level [#1 - 10]\" \n\nFeatures: \n· Fun sounds and images \n· 10 levels of play and nearly 1,000 words \n· A scoring system that awards both consistency and challenge \n· Multimodal support \n\nKnown Issues: \n· Some words can be confusing for Alexa to interpret (this will be remedied in a future update) \n\n ToDo's: \n· Create better ending screen, especially for a perfect score (Current one is beyond bland) \n · Review words and assist Alexa with interpretations (i.e. the word is \"wood\", user says \"wood\", but Alexa interprets as \"would\" \n · Create a global daily High Score list \n · Continue to add variety to questions, responses, images, and sounds"
+          "description": "Using Fry's list of 1,000 sight words, Let's Read teaches children how to read through fun interactions. \n\nThe game is easy to get started; just say, \"Hey Alexa Let's Read\", and Alexa will walk your child through getting the game started. Let's Read uses positive feedback to keep kids interested and coming back to play again and again. If you own a device with a screen, like the Echo Show, Alexa will display a flash card with the word and even display a count of the correct answers. This skill is an awesome addition to any classroom. I hope your child enjoys playing this game as much as I enjoyed working with my family building it! \nIf you enjoy this skill please rate and share, it really helps others discover this skill. Feedback is always appreciated: letsRead@jaredmakes.com \n\nFeatures: \n· Fun sounds and images \n· 10 levels of play and nearly 1,000 words \n· A scoring system that awards both consistency and challenge \n· Multimodal support \n\nKnown Issues: \n· Some words can be confusing for Alexa to interpret (this will be remedied in a future update) \n\n ToDo's: \n· Create better ending screen, especially for a perfect score (Current one is beyond bland) \n · Review words and assist Alexa with interpretations (i.e. the word is \"wood\", user says \"wood\", but Alexa interprets as \"would\" \n · Create a global daily High Score list \n · Continue to add variety to questions, responses, images, and sounds"
         }
       },
       "isAvailableWorldwide": true,
