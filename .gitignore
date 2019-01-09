@@ -86,3 +86,6 @@ typings/
 
 #bst test logs
 ./test/coverage/lcov-report/index.html
+
+#other
+**submission.md

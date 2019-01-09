@@ -114,6 +114,9 @@ const responses = {
       'Way to go!',
       'Awesome!',
       'Well done.',
+      'Nailed it!',
+      'Even better than I could do!',
+      'Hot stuff!',
     ],
   },
   incorrect: {
@@ -132,6 +135,9 @@ const responses = {
       "Not quite, let's try another",
       'Nice try.',
       "You did really good, but that wasn't quite right",
+      'Close',
+      'Nice try, but not quite.',
+      'Not quite, but I know you can get the next one.',
     ],
   },
 };

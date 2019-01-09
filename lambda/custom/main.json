@@ -60,6 +60,7 @@
         "width": "100vw",
         "height": "100vh",
         "direction": "column",
+        "alignItems": "center",
         "items": [
           {
             "type": "BackgroundImage",
@@ -68,31 +69,32 @@
           {
             "when": "${@viewportProfile == @hubRoundSmall}",
             "type": "Container",
-            "width": "100vw",
+            "width": "80vw",
             "height": "100vh",
-            "alignItems": "center",
             "direction": "column",
             "items": [
               {
                 "type": "Text",
                 "text": "${datasource.main.properties.name}",
                 "style": "mainFont",
+                "textAlign": "center",
                 "paddingTop": "10vh",
                 "paddingBottom": "5vh"
               },
               {
                 "type": "Frame",
                 "backgroundColor": "#F0F0F0",
-                "width": "65vw",
-                "borderWidth": "2px",
-                "borderColor": "#3F51B5",
+                "width": "80vw",
+                "height": "50vh",
+                "borderWidth": "5px",
+                "borderColor": "black",
                 "borderRadius": "50",
                 "item": [
                   {
                     "type": "Text",
                     "text": "${datasource.main.properties.word}",
                     "color": "#555555",
-                    "height": "60vh",
+                    "height": "50vh",
                     "textAlign": "center",
                     "textAlignVertical": "center",
                     "fontSize": "9.5vw",
@@ -107,7 +109,8 @@
             "type": "AlexaHeader",
             "headerTitle": "${datasource.main.properties.headerTitle}",
             "headerAttributionImage": "${datasource.main.properties.logoUrl}",
-            "position": "relative"
+            "position": "relative",
+            "width": "100vw"
           },
           {
             "when": "${@viewportProfile != @hubRoundSmall}",

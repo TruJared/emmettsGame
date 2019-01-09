@@ -1,7 +1,14 @@
+const nameCheck = name => {
+  if (name.length > 15) {
+    return `${name.substring(0, 12)}...`;
+  }
+  return name;
+};
+
 const getWord = (wordsList, turn) => {
   const speechText = [
     'The word is ',
-    'What word is this? ',
+    'What word is this?',
     "Here's a new word for you ",
     'Tell me what this spells ',
     'O.K. hotshot, tell me what this word is.',
@@ -202,6 +209,7 @@ const shuffle = a => {
 /* eslint-enable */
 
 module.exports = {
+  nameCheck,
   getWord,
   getDisplayData,
   getRandomInt,

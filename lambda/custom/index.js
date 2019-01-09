@@ -52,6 +52,7 @@ const LaunchRequestHandler = {
     sessionAttributes.currentTurn = 0;
     sessionAttributes.score = 0;
     sessionAttributes.wordsList = [];
+    sessionAttributes.playerInfo = {};
 
     // reset display params too
     displayParams.headerTitle = constants.hasScreen.defaultTitle;
@@ -75,7 +76,9 @@ const LaunchRequestHandler = {
     }
 
     return responseBuilder
-      .speak(`${salutation} ${speechText}`)
+      .speak(
+        `${salutation} <break time="0.25s" /> 'Because this device does not have a screen, I will display the flash cards on your Alexa app.' ${speechText}`
+      )
       .reprompt(repromptText)
       .getResponse();
   },
@@ -130,6 +133,7 @@ const GetPlayerInfoCompleted = {
       level: slotValues.number.resolved,
     };
     sessionAttributes.passTo = 'HelpIntentHandler';
+    sessionAttributes.inGame = true;
 
     // if new, turn off new flag and pass to help menu //
     if (sessionAttributes.newUser) {
@@ -186,18 +190,21 @@ const StartGameIntentHandler = {
   async handle(handlerInput) {
     const { attributesManager, responseBuilder } = handlerInput;
     const sessionAttributes = attributesManager.getSessionAttributes();
-    const {
-      name,
-      confirmationStatus,
-    } = handlerInput.requestEnvelope.request.intent;
     sessionAttributes.passTo = false;
 
     // ? did they figure out how to start without giving their name ? //
-    if (name === 'GetPlayerInfoIntent' && confirmationStatus === 'DENIED') {
+    if (
+      !sessionAttributes.playerInfo.name ||
+      !sessionAttributes.playerInfo.level
+    ) {
       sessionAttributes.playerInfo = {};
       return responseBuilder
-        .speak("I'm sorry, I never asked you your name, What is your name?")
-        .reprompt("I'm sorry, I never asked you your name, What is your name?")
+        .speak(
+          "I'm sorry, I don't recall hearing your name, What is your name?"
+        )
+        .reprompt(
+          "I'm sorry, I don't recall hearing your name, What is your name?"
+        )
         .getResponse();
     }
 
@@ -222,7 +229,9 @@ const StartGameIntentHandler = {
 
     // set up display params
     displayParams.round = '# Correct';
-    displayParams.name = `Name: ${sessionAttributes.playerInfo.name.toUpperCase()}`;
+    displayParams.name = `Name: ${functions
+      .nameCheck(sessionAttributes.playerInfo.name)
+      .toUpperCase()}`;
     displayParams.word = sayWord.toUpperCase();
     displayParams.imageUrl =
       constants.hasScreen.correctImages[sessionAttributes.score];
@@ -237,6 +246,7 @@ const StartGameIntentHandler = {
 
     return responseBuilder
       .speak(`${speechText} <break time="0.50s" /> ${spellWord}`)
+      .withSimpleCard("Let's Read", sayWord.toUpperCase())
       .reprompt(repromptText)
       .getResponse();
   },
@@ -249,7 +259,9 @@ const GameLoopHandler = {
 
     return (
       request.type === 'IntentRequest' &&
-      (request.intent.name === 'GameLoopIntent' && sessionAttributes.inGame)
+      (request.intent.name === 'GameLoopIntent' &&
+        sessionAttributes.inGame &&
+        sessionAttributes.currentTurn > 0)
     );
   },
   async handle(handlerInput) {
@@ -300,7 +312,9 @@ const GameLoopHandler = {
 
     // set up display parameters
     displayParams.round = '# Correct';
-    displayParams.name = `Name: ${sessionAttributes.playerInfo.name.toUpperCase()}`;
+    displayParams.name = `Name: ${functions
+      .nameCheck(sessionAttributes.playerInfo.name)
+      .toUpperCase()}`;
     displayParams.word = sayWord.toUpperCase();
     displayParams.imageUrl =
       constants.hasScreen.correctImages[sessionAttributes.score];
@@ -323,6 +337,7 @@ const GameLoopHandler = {
         ${speechText} <break time="0.25s" />
         ${spellWord}`
       )
+      .withSimpleCard("Let's Read", sayWord.toUpperCase())
       .reprompt(repromptText)
       .getResponse();
   },
@@ -399,7 +414,6 @@ const HelpIntentHandler = {
     const { attributesManager, responseBuilder } = handlerInput;
     const sessionAttributes = attributesManager.getSessionAttributes();
     const { speechText, repromptText } = responses.helpResponse;
-    sessionAttributes.repeatText = repromptText;
     // this flag will force them them to route through the no intent and turn on inGame flag
     // or return to the help menu
     sessionAttributes.passTo = 'HelpIntentHandler';
@@ -449,15 +463,27 @@ const NoIntentHandler = {
     );
   },
   async handle(handlerInput) {
-    const { attributesManager } = handlerInput;
+    const { attributesManager, responseBuilder } = handlerInput;
     const sessionAttributes = attributesManager.getSessionAttributes();
 
     if (sessionAttributes.passTo) {
       switch (sessionAttributes.passTo) {
         case 'HelpIntentHandler':
-          // user doesn't need instructions
-          sessionAttributes.inGame = true;
-          return StartGameIntentHandler.handle(handlerInput);
+          // customer not in game but requests help
+          console.log(sessionAttributes.inGame);
+          console.log(sessionAttributes.currentTurn);
+
+          if (
+            !sessionAttributes.inGame ||
+            sessionAttributes.currentTurn === 0
+          ) {
+            return StartGameIntentHandler.handle(handlerInput);
+          }
+          // customer in game but asks for help
+          return responseBuilder
+            .speak(sessionAttributes.repeatText)
+            .reprompt(sessionAttributes.repeatText)
+            .getResponse();
         default:
           throw new Error(
             `In no intent switch. Most likely this error is because of an invalid 'passTo' value >>> sessionAttributes.passTo = ${
