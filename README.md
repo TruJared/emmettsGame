@@ -1,6 +1,6 @@
 # Let's Read
 
-Check it out on (Amazon)[https://www.amazon.com/gp/product/B07MV521LM?ie=UTF8&ref-suffix=ss_rw]
+Check it out on [Amazon](https://www.amazon.com/gp/product/B07MV521LM?ie=UTF8&ref-suffix=ss_rw)
 
 Let's Read started as a small game that I was building with my girlfriend's son, to introduce him to coding (he's six years old). Although he's a little too young to understand fully what we were doing, he enjoyed adding phrases and helping me test the skill as we worked on it. He also really liked that he was able to practice spelling using Alexa. His sister (four years old), of course, immediately started trying to read too and even shared some ideas to make it better. She had some great input on things Alexa could say to help other kids feel good about their answers. Originally, I didn't plan on including any visual elements as this was just a side project and I wasn't even sure I that I was going to release it to the public; but as I continued to work on this project, I sensed that it could really be used to help teach children how to read.
 
